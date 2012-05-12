@@ -33,6 +33,7 @@ class MailUser(models.Model):
                                  help_text='Base64 encoding of SHA1 digest:'
                                            'Base64(sha1(password + salt) + salt).')
     domain = models.ForeignKey(Domain)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = (('username', 'domain'),)
@@ -87,6 +88,7 @@ class Alias(models.Model):
                                     help_text='Fully qualified destination '
                                               'mailbox address.  May be '
                                               'non-local. Ex: jeff@example.com.')
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = (('source', 'destination'),)
