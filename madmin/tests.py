@@ -1,6 +1,7 @@
 """
 Test the madmin models.
 """
+
 import hashlib
 import base64
 from datetime import datetime
@@ -11,6 +12,7 @@ from django.db import IntegrityError
 
 class DomainTest(TestCase):
     def test_domain_name(self):
+        """Test Domain creation."""
         name = 'example.org'
         new_domain = Domain.objects.create(fqdn=name)
         self.assertEqual(name, str(new_domain))
@@ -23,6 +25,7 @@ class DomainTest(TestCase):
 
 class MailUserTest(TestCase):
     def test_user_profile(self):
+        """Test MailUser creation."""
         fqdn = 'example.org'
         name = 'john'
         domain = Domain.objects.create(fqdn=fqdn)
@@ -34,10 +37,8 @@ class MailUserTest(TestCase):
         self.assertEqual(name, user.username)
         self.assertEqual(domain, user.domain)
 
-        self.assertRaises(IntegrityError, MailUser.objects.create,
-                          username=name, domain=domain)
-
     def test_set_password(self):
+        """Test set_password builds SSHA format password for dovecot auth."""
         # use unicode string to be like django, base64 cannot handle unicode
         password = u'johnpassword'
         domain = Domain.objects.create(fqdn='example.org')
@@ -54,13 +55,31 @@ class MailUserTest(TestCase):
         self.assertEqual(hashed_password, user.shadigest)
 
     def test_unique_username_domain(self):
-        pass
+        """Test MailUser username-domain is unique."""
+        name = 'john'
+        domain = Domain.objects.create(fqdn='example.org')
+        user = MailUser.objects.create(username=name, domain=domain)
+        self.assertRaises(IntegrityError, MailUser.objects.create,
+                          username=name, domain=domain)
+
+        domain2 = Domain.objects.create(fqdn='example.com')
+        user = MailUser.objects.create(username=name, domain=domain2)
 
 
 class AliasTest(TestCase):
     def test_alias(self):
+        """Test Alias creation."""
         domain = Domain.objects.create(fqdn='example.org')
         alias = Alias.objects.create(domain=domain, source='jonny@example.org',
                                      destination='john@example.org')
         self.assertEqual('example.org: jonny@example.org > john@example.org',
                          str(alias))
+
+    def test_unique_source_destination(self):
+        """Test Alias source-destination is unique."""
+        domain = Domain.objects.create(fqdn='example.org')
+        alias = Alias.objects.create(domain=domain, source='jonny@example.org',
+                                     destination='john@example.org')
+        self.assertRaises(IntegrityError, Alias.objects.create, domain=domain,
+                          source='jonny@example.org',
+                          destination='john@example.org')
