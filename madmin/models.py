@@ -2,6 +2,8 @@
 madmin virtual mail administration models.
 """
 
+import string
+import random
 import hashlib
 import base64
 from django.db import models
@@ -45,6 +47,10 @@ class MailUser(models.Model):
 
         Ex: shadigest = Base64(sha1(password + salt) + salt)
         """
+        # new salt, avoid whitespace
+        chars = string.letters + string.digits + string.punctuation
+        self.salt = ''.join(random.choice(chars) for x in xrange(60))
+
         # base64 does not work on unicode, so convert all django unicode strings
         # into normalized strings firt. Use str, since it will throw an error
         # if there are non-ascii characters

@@ -25,35 +25,27 @@ class MailUserTest(TestCase):
     def test_user_profile(self):
         fqdn = 'example.org'
         name = 'john'
-        password = 'johnpassword'
-        salt = '12345'
         domain = Domain.objects.create(fqdn=fqdn)
-        new_user = MailUser.objects.create(username=name, salt=salt,
-                shadigest=password,
-                domain=domain)
+        new_user = MailUser.objects.create(username=name, domain=domain)
         self.assertEqual('john: example.org', str(new_user))
 
         user = MailUser.objects.get(username=name)
         self.assertEqual(new_user, user)
         self.assertEqual(name, user.username)
-        self.assertEqual(salt, user.salt)
-        self.assertEqual(password, user.shadigest)
         self.assertEqual(domain, user.domain)
 
         self.assertRaises(IntegrityError, MailUser.objects.create,
-                          username=name, salt=salt,
-                          shadigest=password,
-                          domain=domain)
+                          username=name, domain=domain)
 
     def test_set_password(self):
-        password = u'johnpassword'  # use unicode string to be like django,
-        salt = u'12345'             # base64 cannot handle unicode
+        # use unicode string to be like django, base64 cannot handle unicode
+        password = u'johnpassword'
         domain = Domain.objects.create(fqdn='example.org')
-        user = MailUser.objects.create(username='john', salt=salt,
-                shadigest=password,
-                domain=domain)
+        user = MailUser.objects.create(username='john', domain=domain)
 
         user.set_password(password)
+        self.assertEqual(60, len(user.salt))
+        salt = user.salt
 
         m = hashlib.sha1()
         m.update(str(password))
