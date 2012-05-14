@@ -28,7 +28,7 @@ admin.site.register(MailUser, MailUserAdmin)
 class AliasAdmin(admin.ModelAdmin):
     fields = ['domain', 'source', 'destination']
     list_display = ['source', 'destination', 'domain', 'created']
-    list_filter = ['source', 'destination', 'domain', 'created']
+    list_filter = ['domain', 'created']
     search_fields = ['source', 'destination', 'domain__fqdn', 'created']
     date_hierarchy = 'created'
 
