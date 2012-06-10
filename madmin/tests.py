@@ -24,57 +24,54 @@ class DomainTest(TestCase):
 
 
 class MailUserTest(TestCase):
+    def setUp(self):
+        # use unicode string to be like django, base64 cannot handle unicode
+        self.name = u'john'
+        self.password = u'johnpassword'
+        self.domain = Domain.objects.create(fqdn='example.org')
+
     def test_user_profile(self):
         """Test MailUser creation."""
-        fqdn = 'example.org'
-        name = 'john'
-        domain = Domain.objects.create(fqdn=fqdn)
-        new_user = MailUser.objects.create(username=name, domain=domain)
+        new_user = MailUser.objects.create(username=self.name,
+                                           domain=self.domain)
         self.assertEqual('john: example.org', str(new_user))
 
-        user = MailUser.objects.get(username=name)
+        user = MailUser.objects.get(username=self.name)
         self.assertEqual(new_user, user)
-        self.assertEqual(name, user.username)
-        self.assertEqual(domain, user.domain)
+        self.assertEqual(self.name, user.username)
+        self.assertEqual(self.domain, user.domain)
 
     def test_set_password(self):
         """Test set_password builds SSHA format password for dovecot auth."""
-        # use unicode string to be like django, base64 cannot handle unicode
-        password = u'johnpassword'
-        domain = Domain.objects.create(fqdn='example.org')
-        user = MailUser.objects.create(username='john', domain=domain)
+        user = MailUser.objects.create(username=self.name, domain=self.domain)
 
-        user.set_password(password)
+        user.set_password(self.password)
         self.assertEqual(60, len(user.salt))
         salt = user.salt
 
         m = hashlib.sha1()
-        m.update(str(password))
+        m.update(str(self.password))
         m.update(str(salt))
         hashed_password = base64.b64encode(m.digest() + str(salt))
         self.assertEqual(hashed_password, user.shadigest)
 
     def test_check_password(self):
         """Test check_password returns correct results for a mail user."""
-        password = u'johnpassword'
-        domain = Domain.objects.create(fqdn='example.org')
-        user = MailUser.objects.create(username='john', domain=domain)
-        user.set_password(password)
+        user = MailUser.objects.create(username=self.name, domain=self.domain)
+        user.set_password(self.password)
 
-        self.assertTrue(user.check_password(password))
+        self.assertTrue(user.check_password(self.password))
         self.assertFalse(user.check_password(''))
         self.assertFalse(user.check_password('johnpassword '))
 
     def test_unique_username_domain(self):
         """Test MailUser username-domain is unique."""
-        name = 'john'
-        domain = Domain.objects.create(fqdn='example.org')
-        user = MailUser.objects.create(username=name, domain=domain)
+        user = MailUser.objects.create(username=self.name, domain=self.domain)
         self.assertRaises(IntegrityError, MailUser.objects.create,
-                          username=name, domain=domain)
+                          username=self.name, domain=self.domain)
 
         domain2 = Domain.objects.create(fqdn='example.com')
-        user = MailUser.objects.create(username=name, domain=domain2)
+        user = MailUser.objects.create(username=self.name, domain=domain2)
 
 
 class AliasTest(TestCase):
