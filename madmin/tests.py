@@ -54,6 +54,17 @@ class MailUserTest(TestCase):
         hashed_password = base64.b64encode(m.digest() + str(salt))
         self.assertEqual(hashed_password, user.shadigest)
 
+    def test_check_password(self):
+        """Test check_password returns correct results for a mail user."""
+        password = u'johnpassword'
+        domain = Domain.objects.create(fqdn='example.org')
+        user = MailUser.objects.create(username='john', domain=domain)
+        user.set_password(password)
+
+        self.assertTrue(user.check_password(password))
+        self.assertFalse(user.check_password(''))
+        self.assertFalse(user.check_password('johnpassword '))
+
     def test_unique_username_domain(self):
         """Test MailUser username-domain is unique."""
         name = 'john'

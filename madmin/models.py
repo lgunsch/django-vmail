@@ -38,6 +38,23 @@ class MailUser(models.Model):
     class Meta:
         unique_together = (('username', 'domain'),)
 
+    def _get_digest(self, raw_password, salt):
+        """
+        Returns a base64 encoded SHA1 digest using the provided
+        raw_password and salt.  The digest is encoded using the
+        following format:
+
+        Base64(sha1(raw_password + salt) + salt)
+        """
+        # base64 does not work on unicode, so convert all django unicode strings
+        # into normalized strings firt. Use str, since it will throw an error
+        # if there are non-ascii characters
+        m = hashlib.sha1()
+        m.update(str(raw_password))
+        m.update(str(salt))
+        digest = base64.b64encode(m.digest() + str(self.salt))
+        return digest
+
     def set_password(self, raw_password):
         """
         Sets the mail user password.  The Password is a base64 encoding
@@ -51,14 +68,19 @@ class MailUser(models.Model):
         # new salt, avoid whitespace
         chars = string.letters + string.digits + string.punctuation
         self.salt = ''.join(random.choice(chars) for x in xrange(60))
+        self.shadigest = self._get_digest(raw_password, self.salt)
 
-        # base64 does not work on unicode, so convert all django unicode strings
-        # into normalized strings firt. Use str, since it will throw an error
-        # if there are non-ascii characters
-        m = hashlib.sha1()
-        m.update(str(raw_password))
-        m.update(str(self.salt))
-        self.shadigest = base64.b64encode(m.digest() + str(self.salt))
+    def check_password(self, raw_password):
+        """
+        Returns True if the given raw string is the correct password
+        for the mail user. (This takes care of the password hashing in
+        making the comparison.)
+        """
+        digest = self._get_digest(raw_password, self.salt)
+        if self.shadigest == digest:
+            return True
+        else:
+            return False
 
     def __unicode__(self):
         return '%s: %s' % (self.username, self.domain.fqdn)
