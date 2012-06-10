@@ -38,4 +38,5 @@ class Command(BaseCommand):
             raise CommandError('Incorrect password.')
 
         user.set_password(new)
+        user.save()
         self.stdout.write('Successful.')
