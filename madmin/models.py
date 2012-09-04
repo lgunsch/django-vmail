@@ -8,6 +8,7 @@ import hashlib
 import base64
 from django.db import models
 
+
 class Domain(models.Model):
     """Represents a virtual mail domain."""
     fqdn = models.CharField(max_length=256, unique=True,
