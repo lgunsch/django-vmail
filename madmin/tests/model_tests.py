@@ -11,39 +11,28 @@ from django.db import IntegrityError
 
 
 class DomainTest(TestCase):
-    def test_domain_name(self):
-        """Test Domain creation."""
-        name = 'example.org'
-        new_domain = Domain.objects.create(fqdn=name)
-        self.assertEqual(name, str(new_domain))
+    fixtures = ['madmin_model_testdata.json']
 
-        domain = Domain.objects.get(fqdn=name)
-        self.assertEqual(new_domain, domain)
-        self.assertEqual(name, domain.fqdn)
+    def test_domain_string(self):
+        domain = Domain.objects.get(pk=1)
+        self.assertEqual(str(domain), 'example.org')
         self.assertIsInstance(domain.created, datetime)
 
 
 class MailUserTest(TestCase):
+    fixtures = ['madmin_model_testdata.json']
+
     def setUp(self):
         # use unicode string to be like django, base64 cannot handle unicode
-        self.name = u'john'
         self.password = u'johnpassword'
-        self.domain = Domain.objects.create(fqdn='example.org')
 
-    def test_user_profile(self):
-        """Test MailUser creation."""
-        new_user = MailUser.objects.create(username=self.name,
-                                           domain=self.domain)
-        self.assertEqual('john: example.org', str(new_user))
-
-        user = MailUser.objects.get(username=self.name)
-        self.assertEqual(new_user, user)
-        self.assertEqual(self.name, user.username)
-        self.assertEqual(self.domain, user.domain)
+    def test_user_string(self):
+        user = MailUser.objects.get(pk=1)
+        self.assertEqual('john: example.org', str(user))
 
     def test_set_password(self):
         """Test set_password builds SSHA format password for dovecot auth."""
-        user = MailUser.objects.create(username=self.name, domain=self.domain)
+        user = MailUser.objects.get(pk=1)
 
         user.set_password(self.password)
         self.assertEqual(60, len(user.salt))
@@ -57,7 +46,7 @@ class MailUserTest(TestCase):
 
     def test_check_password(self):
         """Test check_password returns correct results for a mail user."""
-        user = MailUser.objects.create(username=self.name, domain=self.domain)
+        user = MailUser.objects.get(pk=1)
         user.set_password(self.password)
 
         self.assertTrue(user.check_password(self.password))
@@ -66,28 +55,23 @@ class MailUserTest(TestCase):
 
     def test_unique_username_domain(self):
         """Test MailUser username-domain is unique."""
-        user = MailUser.objects.create(username=self.name, domain=self.domain)
+        user = MailUser.objects.get(pk=1)
         self.assertRaises(IntegrityError, MailUser.objects.create,
-                          username=self.name, domain=self.domain)
-
-        domain2 = Domain.objects.create(fqdn='example.com')
-        user = MailUser.objects.create(username=self.name, domain=domain2)
+                          username=user.username, domain=user.domain)
 
 
 class AliasTest(TestCase):
-    def test_alias(self):
-        """Test Alias creation."""
-        domain = Domain.objects.create(fqdn='example.org')
-        alias = Alias.objects.create(domain=domain, source='jonny@example.org',
-                                     destination='john@example.org')
-        self.assertEqual('example.org: jonny@example.org > john@example.org',
+    fixtures = ['madmin_model_testdata.json']
+
+    def test_alias_string(self):
+        alias = Alias.objects.get(pk=1)
+        self.assertEqual('example.org: bob@example.org > robert@example.org',
                          str(alias))
 
     def test_unique_source_destination(self):
         """Test Alias source-destination is unique."""
-        domain = Domain.objects.create(fqdn='example.org')
-        alias = Alias.objects.create(domain=domain, source='jonny@example.org',
-                                     destination='john@example.org')
-        self.assertRaises(IntegrityError, Alias.objects.create, domain=domain,
-                          source='jonny@example.org',
-                          destination='john@example.org')
+        alias = Alias.objects.get(pk=1)
+        self.assertRaises(IntegrityError, Alias.objects.create,
+                          domain=alias.domain,
+                          source=alias.source,
+                          destination=alias.destination)
