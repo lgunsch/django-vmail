@@ -98,8 +98,8 @@ class Alias(models.Model):
     Source and destination addresses are not required to be local,
     and thus are not necessarily related to local virtual mailbox users.
 
-    @example.org  >  john@example.org  # catch-all alias
-    john@example.org  >  john@example.org  # keep a copy
+        @example.org  >  john@example.org  # catch-all alias
+    john@example.org  >  john@example.org  # keep a copy in local mailbox
     john@example.org  >  jeff@example.com  # forward john to jeff
     """
     domain = models.ForeignKey(Domain, help_text='Domain owning the alias.')

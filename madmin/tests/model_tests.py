@@ -54,7 +54,7 @@ class MailUserTest(TestCase):
         self.assertFalse(user.check_password('johnpassword '))
 
     def test_unique_username_domain(self):
-        """Test MailUser username-domain is unique."""
+        """Test username-domain is unique together."""
         user = MailUser.objects.get(pk=1)
         self.assertRaises(IntegrityError, MailUser.objects.create,
                           username=user.username, domain=user.domain)
@@ -69,7 +69,7 @@ class AliasTest(TestCase):
                          str(alias))
 
     def test_unique_source_destination(self):
-        """Test Alias source-destination is unique."""
+        """Test source-destination is unique together."""
         alias = Alias.objects.get(pk=1)
         self.assertRaises(IntegrityError, Alias.objects.create,
                           domain=alias.domain,
