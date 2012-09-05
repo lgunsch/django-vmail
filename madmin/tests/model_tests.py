@@ -35,7 +35,7 @@ class MailUserTest(TestCase):
         user = MailUser.objects.get(pk=1)
 
         user.set_password(self.password)
-        self.assertEqual(60, len(user.salt))
+        self.assertEqual(user.SALT_LEN, len(user.salt))
         salt = user.salt
 
         m = hashlib.sha1()

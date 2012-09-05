@@ -25,10 +25,11 @@ class MailUser(models.Model):
     Represents a virtual mail user address, also known as the left-hand-side
     or LHS.
     """
+    SALT_LEN = 60
     username = models.SlugField(max_length=96,
                                 help_text="Virtual mail domain user address or"
                                           " LHS.  Ex: 'johnsmith'.")
-    salt = models.CharField(max_length=96, blank=True,
+    salt = models.CharField(max_length=SALT_LEN, blank=True,
                             help_text='Random password salt.')
     shadigest = models.CharField(max_length=256, blank=True,
                                  help_text='Base64 encoding of SHA1 digest:'
@@ -68,7 +69,7 @@ class MailUser(models.Model):
         """
         # new salt, avoid whitespace
         chars = string.letters + string.digits + string.punctuation
-        self.salt = ''.join(random.choice(chars) for x in xrange(60))
+        self.salt = ''.join(random.choice(chars) for x in xrange(self.SALT_LEN))
         self.shadigest = self._get_digest(raw_password, self.salt)
 
     def check_password(self, raw_password):
