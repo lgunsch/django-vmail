@@ -85,7 +85,7 @@ class MailUser(models.Model):
             return False
 
     def __unicode__(self):
-        return '%s: %s' % (self.username, self.domain.fqdn)
+        return '%s@%s' % (self.username, self.domain.fqdn)
 
 
 class Alias(models.Model):

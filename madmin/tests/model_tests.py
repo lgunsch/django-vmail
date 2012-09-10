@@ -28,7 +28,7 @@ class MailUserTest(TestCase):
 
     def test_user_string(self):
         user = MailUser.objects.get(pk=1)
-        self.assertEqual('john: example.org', str(user))
+        self.assertEqual('john@example.org', str(user))
 
     def test_set_password(self):
         """Test set_password builds SSHA format password for dovecot auth."""
