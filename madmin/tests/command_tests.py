@@ -72,3 +72,17 @@ class TestChangePassword(TestCase):
         self.assertSystemExit('@', None, None)
         self.assertSystemExit('a@b.c', None, None)
         self.assertSystemExit(' a@b.c ', None, None)
+
+    def test_bad_domain(self):
+        """Test a valid domain is required."""
+        user = 'john@bad.domain.com'
+        self.assertSystemExit(user, 'old pw', 'new pw')
+
+    def test_bad_mailuser(self):
+        """Test a valid user is required."""
+        user = 'bad_mailuser@example.org'
+        self.assertSystemExit(user, 'old pw', 'new pw')
+
+    def test_bad_old_password(self):
+        user = 'john@example.org'
+        self.assertSystemExit(user, 'old pw', 'new pw')
