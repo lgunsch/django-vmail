@@ -3,8 +3,6 @@ Set password command for administrators to set the password of existing
 mail users.
 """
 
-import re
-
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -21,7 +19,9 @@ class Command(BaseCommand):
         email, password = args
         email = email.strip().lower()
 
-        if not re.match('[^\s@]+@[^\s@]+\.[a-z]{2,6}', email):
+        try:
+            validate_email(email)
+        except ValidationError:
             raise CommandError('Improperly formatted email address.')
 
         username, fqdn = email.split('@')

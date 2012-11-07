@@ -96,7 +96,7 @@
         "pk": 8,
         "model": "madmin.mailuser",
         "fields": {
-            "username": "\"()<>[]:,;\"!#$%&'*+-/=?^_`{}|~?^_`{}|~.a\"",
+            "username": "~`!#$%^&*-_+={}./?|",
             "domain": 2,
             "shadigest": "",
             "salt": "",
