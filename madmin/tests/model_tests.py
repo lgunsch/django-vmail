@@ -18,6 +18,18 @@ class DomainTest(TestCase):
         self.assertEqual(str(domain), 'example.org')
         self.assertIsInstance(domain.created, datetime)
 
+    def test_domain_case(self):
+        domain = Domain.objects.get(pk=1)
+        upper = domain.fqdn.upper()
+        self.assertRaises(IntegrityError, Domain.objects.create, fqdn=upper)
+
+    def test_domain_set_to_lowercase(self):
+        domain_fqdn = 'MyExampleDomain.org'
+        orig_domain = Domain.objects.create(fqdn=domain_fqdn)
+        domain_fqdn = domain_fqdn.lower()
+        domain = Domain.objects.get(fqdn=domain_fqdn)
+        self.assertEqual(orig_domain, domain)
+
 
 class MailUserTest(TestCase):
     fixtures = ['madmin_model_testdata.json']
@@ -59,6 +71,19 @@ class MailUserTest(TestCase):
         self.assertRaises(IntegrityError, MailUser.objects.create,
                           username=user.username, domain=user.domain)
 
+    def test_username_case(self):
+        user = MailUser.objects.get(pk=1)
+        upper = user.username.upper()
+        self.assertRaises(IntegrityError, MailUser.objects.create, username=upper, domain=user.domain)
+
+    def test_username_set_to_lowercase(self):
+        username = 'MyUserName'
+        domain = Domain.objects.get(pk=1)
+        orig_user = MailUser.objects.create(username=username, domain=domain)
+        username = username.lower()
+        user = MailUser.objects.get(username=username, domain=domain)
+        self.assertEqual(orig_user, user)
+
 
 class AliasTest(TestCase):
     fixtures = ['madmin_model_testdata.json']
@@ -75,3 +100,27 @@ class AliasTest(TestCase):
                           domain=alias.domain,
                           source=alias.source,
                           destination=alias.destination)
+
+    def test_alias_case(self):
+        alias = Alias.objects.get(pk=1)
+        source_upper = alias.source.upper()
+        self.assertRaises(IntegrityError, Alias.objects.create,
+                          source=source_upper, destination=alias.destination,
+                          domain=alias.domain)
+        destination_upper = alias.destination.upper()
+        self.assertRaises(IntegrityError, Alias.objects.create,
+                          source=alias.source, destination=destination_upper,
+                          domain=alias.domain)
+        self.assertRaises(IntegrityError, Alias.objects.create,
+                          source=source_upper, destination=destination_upper,
+                          domain=alias.domain)
+
+    def test_alias_set_to_lowercase(self):
+        source = 'MySourceAddress'
+        destination = 'MyDestinationAddress'
+        domain = Domain.objects.get(pk=1)
+        orig_alias = Alias.objects.create(source=source, destination=destination, domain=domain)
+        source = source.lower()
+        destination = destination.lower()
+        alias = Alias.objects.get(source=source, destination=destination, domain=domain)
+        self.assertEqual(orig_alias, alias)

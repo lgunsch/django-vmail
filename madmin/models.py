@@ -16,6 +16,10 @@ class Domain(models.Model):
                                       " qualified.  Ex: 'example.org'.")
     created = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        self.fqdn = self.fqdn.lower()
+        super(Domain, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.fqdn
 
@@ -39,6 +43,10 @@ class MailUser(models.Model):
 
     class Meta:
         unique_together = (('username', 'domain'),)
+
+    def save(self, *args, **kwargs):
+        self.username = self.username.lower()
+        super(MailUser, self).save(*args, **kwargs)
 
     def _get_digest(self, raw_password, salt):
         """
@@ -116,6 +124,11 @@ class Alias(models.Model):
 
     class Meta:
         unique_together = (('source', 'destination'),)
+
+    def save(self, *args, **kwargs):
+        self.source = self.source.lower()
+        self.destination = self.destination.lower()
+        super(Alias, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return '%s: %s > %s' % (self.domain.fqdn, self.source, self.destination)
