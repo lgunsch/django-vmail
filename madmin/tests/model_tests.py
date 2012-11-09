@@ -5,6 +5,7 @@ Test the madmin models.
 import hashlib
 import base64
 from datetime import datetime
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from madmin.models import MailUser, Domain, Alias
 from django.db import IntegrityError
@@ -19,11 +20,13 @@ class DomainTest(TestCase):
         self.assertIsInstance(domain.created, datetime)
 
     def test_domain_case(self):
+        """Test FQDN is case-insensitive."""
         domain = Domain.objects.get(pk=1)
         upper = domain.fqdn.upper()
         self.assertRaises(IntegrityError, Domain.objects.create, fqdn=upper)
 
     def test_domain_set_to_lowercase(self):
+        """Test FQDN is set to lowercase."""
         domain_fqdn = 'MyExampleDomain.org'
         orig_domain = Domain.objects.create(fqdn=domain_fqdn)
         domain_fqdn = domain_fqdn.lower()
@@ -72,17 +75,42 @@ class MailUserTest(TestCase):
                           username=user.username, domain=user.domain)
 
     def test_username_case(self):
+        """Test usename is case-insensitive."""
         user = MailUser.objects.get(pk=1)
         upper = user.username.upper()
         self.assertRaises(IntegrityError, MailUser.objects.create, username=upper, domain=user.domain)
 
     def test_username_set_to_lowercase(self):
+        """Test username is set to lowercase."""
         username = 'MyUserName'
         domain = Domain.objects.get(pk=1)
         orig_user = MailUser.objects.create(username=username, domain=domain)
         username = username.lower()
         user = MailUser.objects.get(username=username, domain=domain)
         self.assertEqual(orig_user, user)
+
+    def test_get_from_email(self):
+        """Test get_from_email fetches MailUser correctly."""
+        user = MailUser.objects.get(pk=7)
+        fetched_user = MailUser.get_from_email(str(user))
+        self.assertEqual(user, fetched_user)
+
+    def test_get_from_email_bad_email(self):
+        """Test a proper email is required."""
+        self.assertRaises(ValidationError, MailUser.get_from_email, '')
+        self.assertRaises(ValidationError, MailUser.get_from_email, '@')
+        self.assertRaises(ValidationError, MailUser.get_from_email, 'a@b.c')
+        self.assertRaises(ValidationError, MailUser.get_from_email, ' a@b.c ')
+
+    def test_get_from_email_bad_domain(self):
+        """Test a valid domain is required."""
+        user = 'john@bad.domain.com'
+        self.assertRaises(Domain.DoesNotExist, MailUser.get_from_email, user)
+
+    def test_bad_mailuser(self):
+        """Test a valid user is required."""
+        user = 'bad_mailuser@example.org'
+        self.assertRaises(MailUser.DoesNotExist, MailUser.get_from_email, user)
 
 
 class AliasTest(TestCase):
@@ -102,6 +130,7 @@ class AliasTest(TestCase):
                           destination=alias.destination)
 
     def test_alias_case(self):
+        """Test alias source and destination are case-insensitive."""
         alias = Alias.objects.get(pk=1)
         source_upper = alias.source.upper()
         self.assertRaises(IntegrityError, Alias.objects.create,
@@ -116,6 +145,7 @@ class AliasTest(TestCase):
                           domain=alias.domain)
 
     def test_alias_set_to_lowercase(self):
+        """Test source and destination are set to lowercase."""
         source = 'MySourceAddress'
         destination = 'MyDestinationAddress'
         domain = Domain.objects.get(pk=1)

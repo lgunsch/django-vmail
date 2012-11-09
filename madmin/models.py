@@ -8,6 +8,8 @@ import hashlib
 import base64
 from django.db import models
 
+from django.core.validators import validate_email
+
 
 class Domain(models.Model):
     """Represents a virtual mail domain."""
@@ -91,6 +93,25 @@ class MailUser(models.Model):
             return True
         else:
             return False
+
+    @classmethod
+    def get_from_email(cls, email):
+        """
+        Return a valid `MailUser` instance from an email address.  If
+        the domain does not exist, `Domain.DoesNotExist` is raised.  If
+        the user does not exist, but the domain does exist, then
+        `MailUser.DoesNotExist` is raised. If the email is not parseable
+        then a `ValidationError` is raised.
+        """
+        email = email.strip().lower()
+        validate_email(email)
+
+        username, fqdn = email.split('@')
+        username = username.strip()
+
+        domain = Domain.objects.get(fqdn=fqdn)
+        user = MailUser.objects.get(username=username, domain=domain)
+        return user
 
     def __unicode__(self):
         return '%s@%s' % (self.username, self.domain.fqdn)
