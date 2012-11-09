@@ -4,7 +4,6 @@ Chpasswd command for existing mail users to change their password.
 
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from madmin.models import MailUser, Domain
 
 
@@ -21,26 +20,15 @@ class Command(BaseCommand):
             raise CommandError(usage)
 
         email, curr, new = args
-        email = email.strip().lower()
 
         try:
-            validate_email(email)
+            user = MailUser.get_from_email(email)
         except ValidationError:
             raise CommandError('Improperly formatted email address.')
-
-        username, fqdn = email.split('@')
-        fqdn = fqdn.strip().lower()
-        username = username.strip()
-
-        try:
-            domain = Domain.objects.get(fqdn=fqdn)
         except Domain.DoesNotExist:
-            raise CommandError('Domain %s does not exist.' % fqdn)
-
-        try:
-            user = MailUser.objects.get(username=username, domain=domain)
+            raise CommandError('Domain does not exist.')
         except MailUser.DoesNotExist:
-            raise CommandError('Username %s does not exist.' % username)
+            raise CommandError('Username does not exist.')
 
         authorized = user.check_password(curr)
         if not authorized:
