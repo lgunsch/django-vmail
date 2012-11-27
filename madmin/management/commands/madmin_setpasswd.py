@@ -1,25 +1,26 @@
 """
-Chpasswd command for existing mail users to change their password.
+Set password command for administrators to set the password of existing
+mail users.
 """
 
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
+
 from madmin.models import MailUser, Domain
 
 
 class Command(BaseCommand):
-    args = 'email password new_password'
-    help = ('The madmin_chpasswd command changes a mail users password\n'
-            'given their email address and current password.  By default\n'
-            'the passwords must be supplied in clear-text, and are\n'
-            'encrypted by chpasswd.')
+    args = 'email password'
+    help = ('The madmin_setpasswd command sets a mail users password given\n'
+            'their email address.  The current password is not required.\n'
+            'By default the password must be supplied in clear-text.')
 
     def handle(self, *args, **options):
-        usage = 'Required arguments: email password new_password'
-        if len(args) != 3:
+        usage = 'Required arguments: email new_password'
+        if len(args) != 2:
             raise CommandError(usage)
 
-        email, curr, new = args
+        email, password = args
 
         try:
             user = MailUser.get_from_email(email)
@@ -30,10 +31,6 @@ class Command(BaseCommand):
         except MailUser.DoesNotExist:
             raise CommandError('Username does not exist.')
 
-        authorized = user.check_password(curr)
-        if not authorized:
-            raise CommandError('Incorrect password.')
-
-        user.set_password(new)
+        user.set_password(password)
         user.save()
         self.stdout.write('Successful.\n')
