@@ -10,13 +10,13 @@ from madmin.models import MailUser, Domain
 
 
 class Command(BaseCommand):
-    args = '<email> <password>'
+    args = 'email password'
     help = ('The madmin_setpasswd command sets a mail users password given\n'
             'their email address.  The current password is not required.\n'
             'By default the password must be supplied in clear-text.')
 
     def handle(self, *args, **options):
-        usage = 'Required arguments: <email> <new_password>'
+        usage = 'Required arguments: email new_password'
         if len(args) != 2:
             raise CommandError(usage)
 
@@ -33,4 +33,4 @@ class Command(BaseCommand):
 
         user.set_password(password)
         user.save()
-        self.stdout.write('Successful.')
+        self.stdout.write('Successful.\n')

@@ -13,9 +13,9 @@ from madmin.models import MailUser, Domain
 
 
 class Command(BaseCommand):
-    args = '<email> [--create-domain]'
+    args = 'email [--create-domain]'
     help = ('The madmin_addmbox creates a new MailUser account, with no '
-            'set password. If --create-domain is used then the domain '
+            'set password.  If --create-domain is used then the domain '
             'is also created if it does not exist.')
     option_list = BaseCommand.option_list + (
         make_option('--create-domain',
@@ -26,7 +26,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        usage = 'Required arguments: <email> [--create-domain]'
+        usage = 'Required arguments: email [--create-domain]'
         if len(args) != 1:
             raise CommandError(usage)
 
