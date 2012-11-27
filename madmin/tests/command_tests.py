@@ -8,7 +8,7 @@ import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 
-from madmin.models import MailUser
+from madmin.models import MailUser, Domain
 
 
 class BaseCommandTestCase(object):
@@ -132,3 +132,38 @@ class TestSetPassword(BaseCommandTestCase, TestCase):
         self._test_change_password(1)
         self._test_change_password(7)
         self._test_change_password(8)
+
+
+class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
+
+    cmd = 'madmin_addmbox'
+    arglen = 1
+
+    def test_bad_email(self):
+        """Test a proper email is required."""
+        self.assertSystemExit('')
+        self.assertSystemExit('@')
+        self.assertSystemExit('a@b.c')
+        self.assertSystemExit(' a@b.c ')
+
+    def test_user_already_exests(self):
+        user = MailUser.objects.get(pk=1)
+        self.assertSystemExit(str(user))
+
+    def test_create_user(self):
+        domain = Domain.objects.get(pk=1)
+        user = 'me'
+        call_command(self.cmd, '%s@%s' % (user, domain))
+        created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
+        self.assertEqual(created_user.username, user)
+        self.assertEqual(created_user.domain, domain)
+
+    def test_create_user_domain_not_exists(self):
+        user = 'me'
+        domain = 'unknown.com'
+        self.assertSystemExit('%s@%s' % (user, domain))
+
+        call_command(self.cmd, '%s@%s' % (user, domain), create_domain=True)
+        created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
+        self.assertEqual(created_user.username, user)
+        self.assertEqual(created_user.domain.fqdn, domain)
