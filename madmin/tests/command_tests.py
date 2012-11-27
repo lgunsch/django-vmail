@@ -167,3 +167,13 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
         self.assertEqual(created_user.username, user)
         self.assertEqual(created_user.domain.fqdn, domain)
+
+    def test_create_user_with_password(self):
+        user = 'me'
+        domain = 'example.com'
+        password = 'my_new_password'
+        call_command(self.cmd, '%s@%s' % (user, domain), password=password)
+        created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
+        self.assertTrue(created_user.check_password(password))
+        self.assertEqual(created_user.username, user)
+        self.assertEqual(created_user.domain.fqdn, domain)
