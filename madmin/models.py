@@ -31,7 +31,7 @@ class MailUser(models.Model):
     Represents a virtual mail user address, also known as the left-hand-side
     or LHS.
     """
-    SALT_LEN = 60
+    SALT_LEN = 96
     username = models.SlugField(max_length=96,
                                 help_text="Virtual mail domain user address or"
                                           " LHS.  Ex: 'johnsmith'.")
