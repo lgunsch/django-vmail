@@ -33,6 +33,13 @@ class DomainTest(TestCase):
         domain = Domain.objects.get(fqdn=domain_fqdn)
         self.assertEqual(orig_domain, domain)
 
+    def test_active_by_default(self):
+        """Domain is active by default, and not required."""
+        domain_fqdn = 'myexampledomain.org'
+        Domain.objects.create(fqdn=domain_fqdn)
+        domain = Domain.objects.get(fqdn=domain_fqdn)
+        self.assertTrue(domain.active)
+
 
 class MailUserTest(TestCase):
     fixtures = ['madmin_model_testdata.json']
@@ -88,6 +95,14 @@ class MailUserTest(TestCase):
         username = username.lower()
         user = MailUser.objects.get(username=username, domain=domain)
         self.assertEqual(orig_user, user)
+
+    def test_active_by_default(self):
+        """MailUser is active by default, and not required."""
+        username = 'myusername'
+        domain = Domain.objects.get(pk=1)
+        MailUser.objects.create(username=username, domain=domain)
+        user = MailUser.objects.get(username=username, domain=domain)
+        self.assertTrue(user.active)
 
     def test_get_from_email(self):
         """Test get_from_email fetches MailUser correctly."""
@@ -154,3 +169,13 @@ class AliasTest(TestCase):
         destination = destination.lower()
         alias = Alias.objects.get(source=source, destination=destination, domain=domain)
         self.assertEqual(orig_alias, alias)
+
+    def test_active_by_default(self):
+        """Alias is active by default, and not required."""
+        source = 'mysourceaddress'
+        destination = 'mydestinationaddress'
+        domain = Domain.objects.get(pk=1)
+
+        Alias.objects.create(source=source, destination=destination, domain=domain)
+        alias = Alias.objects.get(source=source, destination=destination, domain=domain)
+        self.assertTrue(alias.active)

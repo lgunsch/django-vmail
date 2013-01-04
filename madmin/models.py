@@ -16,6 +16,7 @@ class Domain(models.Model):
     fqdn = models.CharField(max_length=256, unique=True,
                             help_text="Virtual mailbox domains, fully"
                                       " qualified.  Ex: 'example.org'.")
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
@@ -41,6 +42,7 @@ class MailUser(models.Model):
                                  help_text='Base64 encoding of SHA1 digest:'
                                            'Base64(sha1(password + salt) + salt).')
     domain = models.ForeignKey(Domain)
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -141,6 +143,7 @@ class Alias(models.Model):
                                     help_text='Fully qualified destination '
                                               'mailbox address.  May be '
                                               'non-local. Ex: jeff@example.com.')
+    active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
