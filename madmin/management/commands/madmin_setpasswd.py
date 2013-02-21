@@ -11,9 +11,9 @@ from madmin.models import MailUser, Domain
 
 class Command(BaseCommand):
     args = 'email password'
-    help = ('The madmin_setpasswd command sets a mail users password given\n'
-            'their email address.  The current password is not required.\n'
-            'By default the password must be supplied in clear-text.')
+    help = ('Sets a mail users password. The current password is not\n'
+            'required, and by default, the password must be supplied in\n'
+            'clear-text.')
 
     def handle(self, *args, **options):
         usage = 'Required arguments: email new_password'

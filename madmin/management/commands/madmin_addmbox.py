@@ -14,10 +14,10 @@ from madmin.models import MailUser, Domain
 
 class Command(BaseCommand):
     args = 'email [--create-domain] [--password password]'
-    help = ('The madmin_addmbox creates a new MailUser account, with no '
-            'set password.  If --create-domain is used then the domain '
-            'is also created if it does not exist.  If --password is '
-            'used then the password is set.')
+    help = ('Create a new MailUser account, with no set password. If\n'
+            '--create-domain is used then the domain is also created,\n'
+            'given it does not exist. If --password is used then the\n'
+            'password is set.')
     option_list = BaseCommand.option_list + (
         make_option('--create-domain',
                     action='store_true',

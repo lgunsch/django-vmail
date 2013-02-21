@@ -9,10 +9,10 @@ from madmin.models import MailUser, Domain
 
 class Command(BaseCommand):
     args = 'email password new_password'
-    help = ('The madmin_chpasswd command changes a mail users password\n'
-            'given their email address and current password.  By default\n'
-            'the passwords must be supplied in clear-text, and are\n'
-            'encrypted by chpasswd.')
+    help = ('Reset a mail users password, given their email address\n'
+            'and current password. By default the passwords must be\n'
+            'supplied in clear-text, and are cryptographically hashed\n'
+            'by chpasswd.')
 
     def handle(self, *args, **options):
         usage = 'Required arguments: email password new_password'
