@@ -8,7 +8,7 @@ import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 
-from madmin.models import MailUser, Domain
+from madmin.models import MailUser, Domain, Alias
 
 
 class BaseCommandTestCase(object):
@@ -177,3 +177,47 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
         self.assertTrue(created_user.check_password(password))
         self.assertEqual(created_user.username, user)
         self.assertEqual(created_user.domain.fqdn, domain)
+
+
+class TestAddAlias(BaseCommandTestCase, TestCase):
+
+    cmd = 'madmin_addalias'
+    arglen = 3
+
+    def test_bad_destination_email(self):
+        """Test a proper email is required."""
+        # Only destination is required to be a valid email address
+        self.assertSystemExit(str(self.domain), self.source, '')
+        self.assertSystemExit(str(self.domain), self.source, '@')
+        self.assertSystemExit(str(self.domain), self.source, 'a@b.c')
+        self.assertSystemExit(str(self.domain), self.source, ' a@b.c ')
+
+    def setUp(self):
+        super(TestAddAlias, self).setUp()
+        self.domain = Domain.objects.get(pk=1)
+        self.source = "alice@example.com"
+        self.destination = "alice@example.org"
+
+    def test_add_alias(self):
+        call_command(self.cmd, str(self.domain), self.source, self.destination)
+        self._assert_created()
+
+    def test_add_catchall(self):
+        self.source = '@example.com'
+        call_command(self.cmd, str(self.domain), self.source, self.destination)
+        self._assert_created()
+
+    def test_add_alias_domain_has_at_symbol(self):
+        call_command(
+            self.cmd, '@%s' % (self.domain), self.source, self.destination)
+        self._assert_created()
+
+    def _assert_created(self):
+        alias = Alias.objects.get(domain__fqdn=str(self.domain),
+                                  source=self.source,
+                                  destination=self.destination)
+        self.assertTrue(alias.active)
+
+    def test_aliase_exists(self):
+        call_command(self.cmd, str(self.domain), self.source, self.destination)
+        self.assertSystemExit(self.cmd, str(self.domain), self.source, self.destination)
