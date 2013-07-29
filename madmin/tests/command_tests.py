@@ -48,7 +48,7 @@ class BaseCommandTestCase(object):
 
 class TestChangePassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin_chpasswd'
+    cmd = 'madmin-chpasswd'
     arglen = 3
 
     def _test_change_password(self, pk_):
@@ -94,7 +94,7 @@ class TestChangePassword(BaseCommandTestCase, TestCase):
 
 class TestSetPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin_setpasswd'
+    cmd = 'madmin-setpasswd'
     arglen = 2
 
     def test_bad_email(self):
@@ -136,7 +136,7 @@ class TestSetPassword(BaseCommandTestCase, TestCase):
 
 class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin_addmbox'
+    cmd = 'madmin-addmbox'
     arglen = 1
 
     def test_bad_email(self):
@@ -181,7 +181,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
 class TestAddAlias(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin_addalias'
+    cmd = 'madmin-addalias'
     arglen = 3
 
     def test_bad_destination_email(self):
