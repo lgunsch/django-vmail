@@ -4,11 +4,14 @@ Test the madmin models.
 
 import hashlib
 import base64
+
 from datetime import datetime
+
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.db import IntegrityError, transaction
+from django.test import TestCase, TransactionTestCase
+
 from madmin.models import MailUser, Domain, Alias
-from django.db import IntegrityError
 
 
 class DomainTest(TestCase):
@@ -144,21 +147,6 @@ class AliasTest(TestCase):
                           source=alias.source,
                           destination=alias.destination)
 
-    def test_alias_case(self):
-        """Test alias source and destination are case-insensitive."""
-        alias = Alias.objects.get(pk=1)
-        source_upper = alias.source.upper()
-        self.assertRaises(IntegrityError, Alias.objects.create,
-                          source=source_upper, destination=alias.destination,
-                          domain=alias.domain)
-        destination_upper = alias.destination.upper()
-        self.assertRaises(IntegrityError, Alias.objects.create,
-                          source=alias.source, destination=destination_upper,
-                          domain=alias.domain)
-        self.assertRaises(IntegrityError, Alias.objects.create,
-                          source=source_upper, destination=destination_upper,
-                          domain=alias.domain)
-
     def test_alias_set_to_lowercase(self):
         """Test source and destination are set to lowercase."""
         source = 'MySourceAddress'
@@ -179,3 +167,30 @@ class AliasTest(TestCase):
         Alias.objects.create(source=source, destination=destination, domain=domain)
         alias = Alias.objects.get(source=source, destination=destination, domain=domain)
         self.assertTrue(alias.active)
+
+
+class TransactionalAliasTest(TransactionTestCase):
+    fixtures = ['madmin_model_testdata.json']
+
+    def _create(self, source, destination, domain):
+        try:
+            Alias.objects.create(source=source, destination=destination,
+                                 domain=domain)
+        except IntegrityError:
+            transaction.rollback()
+            raise
+
+    def test_alias_case(self):
+        """Test alias source and destination are case-insensitive."""
+        alias = Alias.objects.get(pk=1)
+
+        source_upper = alias.source.upper()
+        with self.assertRaises(IntegrityError):
+            self._create(source_upper, alias.destination, alias.domain)
+
+        destination_upper = alias.destination.upper()
+        with self.assertRaises(IntegrityError):
+            self._create(alias.source, destination_upper, alias.domain)
+
+        with self.assertRaises(IntegrityError):
+            self._create(source_upper, destination_upper, alias.domain)
