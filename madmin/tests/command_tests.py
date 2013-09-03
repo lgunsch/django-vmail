@@ -6,6 +6,7 @@ import sys
 import StringIO
 
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase
 
 from madmin.models import MailUser, Domain, Alias
@@ -31,14 +32,13 @@ class BaseCommandTestCase(object):
     def assertSystemExit(self, *args, **opts):
         """
         Apply the given arguments and options to the current command in
-        `self.cmd` and ensure that SystemExit is raised, that is,
-        ensure that a CommandError was raised.  Default aurguments
-        `verbosity=0` and `interactive=False` are applied if they are
-        not provided.
+        `self.cmd` and ensure that CommandError is raised.  Default
+        aurguments `verbosity=0` and `interactive=False` are applied
+        if they are not provided.
         """
         default_opts = {'verbosity': 0, 'interactive': False}
         opts = dict(default_opts.items() + opts.items())
-        self.assertRaises(SystemExit, call_command, self.cmd, *args, **opts)
+        self.assertRaises(CommandError, call_command, self.cmd, *args, **opts)
 
     def test_bad_arg_len(self):
         """Test that an incorrect # of positional arguments raises an error."""
