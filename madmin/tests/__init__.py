@@ -1,2 +1,2 @@
-from madmin.tests.model_tests import *
-from madmin.tests.command_tests import *
+from .model_tests import *
+from .command_tests import *

@@ -6,8 +6,8 @@ import string
 import random
 import hashlib
 import base64
-from django.db import models
 
+from django.db import models
 from django.core.validators import validate_email
 
 
