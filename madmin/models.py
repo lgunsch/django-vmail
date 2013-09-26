@@ -2,13 +2,13 @@
 madmin virtual mail administration models.
 """
 
-import string
-import random
-import hashlib
 import base64
-from django.db import models
+import hashlib
+import random
+import string
 
 from django.core.validators import validate_email
+from django.db import models
 
 
 class Domain(models.Model):
