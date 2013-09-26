@@ -1,7 +1,9 @@
 import sys
 
 from django.core.management.base import BaseCommand, CommandError
+
 from madmin.models import MailUser, Domain
+
 
 class Command(BaseCommand):
     args = '<email> <curr_password> <new_password>'

@@ -4,11 +4,13 @@ Test the madmin models.
 
 import hashlib
 import base64
+
 from datetime import datetime
-from django.test import TestCase
-from madmin.models import MailUser, Domain, Alias
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.test import TestCase
+
+from madmin.models import MailUser, Domain, Alias
 
 class DomainTest(TestCase):
     def test_domain_name(self):
