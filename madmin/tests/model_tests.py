@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.test import TestCase, TransactionTestCase
 
-from madmin.models import MailUser, Domain, Alias
+from ..models import MailUser, Domain, Alias
 
 
 class DomainTest(TestCase):

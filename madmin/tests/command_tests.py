@@ -9,7 +9,7 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import TestCase
 
-from madmin.models import MailUser, Domain, Alias
+from ..models import MailUser, Domain, Alias
 
 
 class BaseCommandTestCase(object):
