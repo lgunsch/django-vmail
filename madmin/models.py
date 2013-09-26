@@ -2,11 +2,13 @@
 madmin virtual mail administration models.
 """
 
-import string
-import random
-import hashlib
 import base64
+import hashlib
+import random
+import string
+
 from django.db import models
+
 
 class Domain(models.Model):
     """Represents a virtual mail domain."""

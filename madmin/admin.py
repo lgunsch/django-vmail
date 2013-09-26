@@ -5,6 +5,7 @@ madmin virtual mail administration interface configuration.
 from django.contrib import admin
 from madmin.models import Domain, MailUser, Alias
 
+
 class DomainAdmin(admin.ModelAdmin):
     fields = ['fqdn']
     list_display = ['fqdn', 'created']
