@@ -17,7 +17,7 @@ setup(
     author="Lewis Gunsch",
     author_email="lewis@gunsch.ca",
     url="https://github.com/lgunsch/madmin",
-    license='LICENSE.md',
+    license='MIT',
     long_description=README,
     packages=[
         'madmin',
