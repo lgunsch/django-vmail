@@ -1,25 +1,29 @@
 import os
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from distutils.core import setup
+
+VERSION = '0.1.0'
 
 README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
 required = [
-    'Django==1.5.4',
+    'Django >= 1.5.0',
 ]
 
 setup(
     name='madmin',
-    version='0.1.0',
-    packages=[
-        'madmin'
-    ],
+    version=VERSION,
     description="Virtual mail administration django app",
-    long_description=README,
     author="Lewis Gunsch",
+    author_email="lewis@gunsch.ca",
+    url="https://github.com/lgunsch/madmin",
+    long_description=README,
+    packages=[
+        'madmin',
+        'madmin.management',
+        'madmin.management.commands',
+        'madmin.migrations',
+    ],
     scripts=[],
     install_requires=required,
 )
