@@ -27,7 +27,7 @@ In The Future
 
 Bugs & Feature Requests
 -----------------------
-Any bugs reports, or feature requests can be added to the [issue tracker][issue] at the github project page.
+Any bugs reports, or feature requests can be added to the [issue tracker][issues] at the github project page.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/lgunsch/madmin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
