@@ -1,7 +1,7 @@
 Madmin - Mail Administration
 ============================
 
-Madmin is a [Django][django] app which provides the necessary framework for a
+Madmin is a [Django][django] app which provides a necessary framework for a
 virtual domain email setup via [Postfix][postfix] and [Dovecot][dovecot].
 
 Madmin creates and manages mail domains, mailboxes, and aliases for Postfix
@@ -15,8 +15,8 @@ tutorials you can find at [Workaround.org][workaround].
 
 Why madmin?
 -----------
- * You can use django-admin to quickly put together a customnized admin interface (rather then using phpMyAdmin for example).
- * In the spirit of django, you can quickly put together apps to utilize your email database.
+ * You can use django-admin to quickly put together a customnized admin interface (rather then using phpMyAdmin, for example).
+ * In the spirit of Django, you can quickly put together apps to utilize your email database.
 
 In The Future
 -------------
