@@ -2,8 +2,8 @@
 Madmin - Mail Administration
 ============================
 
-Madmin is a  _Django app which provides a necessary framework for a
-virtual domain email setup via _Postfix and _Dovecot.
+Madmin is a  Django_ app which provides a necessary framework for a
+virtual domain email setup via Postfix_ and Dovecot_.
 
 Madmin creates and manages mail domains, mailboxes, and aliases for Postfix
 and Dovecot.  It allows system administrators to easily manage an email
@@ -12,7 +12,7 @@ Dovecot, and comes pre-packaged with a set of administration commands to
 accompany the default Django admin interface.
 
 Madmin was written to work with ISP virtual mail setups, similar to the
-tutorials you can find at `workaround.org`_Workaround.
+tutorials you can find at `workaround.org`Workaround_.
 
 Why madmin?
 -----------
@@ -30,7 +30,7 @@ In The Future
 
 Bugs & Feature Requests
 -----------------------
-Any bugs reports, or feature requests can be added to the _issues at the github project page.
+Any bugs reports, or feature requests can be added to the issues_ at the github project page.
 
 .. image:: https://d2weczhvl823v0.cloudfront.net/lgunsch/madmin/trend.png
    :alt: Bitdeli badge
@@ -41,5 +41,3 @@ Any bugs reports, or feature requests can be added to the _issues at the github 
 .. _Django: https://www.djangoproject.com/
 .. _Dovecot: http://www.dovecot.org/
 .. _Postfix: http://www.postfix.org/
-
-
