@@ -24,6 +24,7 @@ setup(
         'madmin.management',
         'madmin.management.commands',
         'madmin.migrations',
+        'madmin.tests',
     ],
     scripts=[],
     install_requires=required,
