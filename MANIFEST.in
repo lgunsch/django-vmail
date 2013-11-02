@@ -1,0 +1,8 @@
+include README.md
+include LICENSE
+include requirements.txt
+include MANIFEST.in
+recursive-include docs *
+recursive-include madmin/fixtures *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
