@@ -28,6 +28,10 @@ In The Future
 * amavisd-new support for spamassasin configuration per mailbox.
 * Mass email support.
 
+Configuration
+-------------
+See the configuration docs_.
+
 Bugs & Feature Requests
 -----------------------
 Any bugs reports, or feature requests can be added to the issues_ at the github project page.
@@ -36,6 +40,7 @@ Any bugs reports, or feature requests can be added to the issues_ at the github 
    :alt: Bitdeli badge
    :target: https://bitdeli.com/free
 
+.. _docs: ./docs/configuration.rst
 .. _issues: https://github.com/lgunsch/madmin/issues
 .. _Workaround: https://workaround.org/ispmail
 .. _Django: https://www.djangoproject.com/
