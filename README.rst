@@ -13,7 +13,7 @@ set of administration commands to accompany the default Django admin
 interface.
 
 Madmin was written to work with ISP virtual mail setups, similar to the
-tutorials you can find at `workaround.org`Workaround_.
+tutorials you can find at `workaround.org`__.
 
 Why madmin?
 -----------
@@ -47,3 +47,5 @@ Any bugs reports, or feature requests can be added to the issue_ page at the git
 .. _Django: https://www.djangoproject.com/
 .. _Dovecot: http://www.dovecot.org/
 .. _Postfix: http://www.postfix.org/
+
+__ Workaround_
