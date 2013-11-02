@@ -3,23 +3,20 @@ Configuration
 =============
 
 Below are the **PostgreSQL** SQL queries for configuring Postfix, and Dovecot.
-Note this is **not a guide** on how to configure Postfix.  It is expected that
-you have already configured Postfix.  See
+Note that this is **not a guide** on how to configure Postfix.  It is expected
+that you have already configured Postfix.  See
 `workaround.org <https://workaround.org/ispmail>`_ for a guide on configuring
 a mail server.
 
+In version 0.2.0 of madmin there will be commands to help you configure the
+below SQL queries for your particular database.
 
-In version 0.2.0 of madmin there will be commands to help you configure these
-SQL queries for your particular database.
-
-Note: Madmin is configured to use SSHA password scheme with Dovecot.
+Note: Madmin is configured to use the SSHA password scheme with Dovecot.
 
 Postfix
 -------
-
 These queries were tested on Postfix version 2.9, released with Debian Wheezy, and
 version 2.7, released with Debian Squeeze.
-
 
 In ``/etc/postfix/pgsql-virtual-mailbox-domains.cf`` ::
 
@@ -78,7 +75,7 @@ In ``/etc/postfix/pgsql-email2email.cf`` ::
 
 Dovecot
 ---------
-Dovecot 1 and 2 have the same SQL query configuration, however, they will be
+Dovecot 1 and 2 have the same SQL query configuration, however, they may be
 in diffrent file locations depending on your setup.  Dovecot 2 was shipped
 with Debian Wheezy, and Dovecot 1 with Squeeze.
 
@@ -97,7 +94,7 @@ In ``/etc/dovecot/dovecot-sql.conf.ext`` or ``/etc/dovecot/dovecot-sql.conf`` ::
              madmin_domain.active=TRUE AND \
              madmin_mailuser.active=TRUE
 
-Note: You should configure dovecot to not user specific settings. In
+Note: You should configure Dovecot to not user specific settings. In
 the ``userdb`` section of the Dovecot configuration.  For *example* ::
 
     userdb {
