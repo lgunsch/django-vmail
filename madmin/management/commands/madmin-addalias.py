@@ -80,4 +80,4 @@ class Command(BaseCommand):
         except IntegrityError:
             raise CommandError('Alias exists already.')
 
-        self.stdout.write('Successful.\n')
+        self.stdout.write('Success.\n')

@@ -66,4 +66,4 @@ class Command(BaseCommand):
             user.save()
             self.stdout.write('Set the password.\n')
 
-        self.stdout.write('Successful.\n')
+        self.stdout.write('Success.\n')

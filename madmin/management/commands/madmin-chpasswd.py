@@ -36,4 +36,4 @@ class Command(BaseCommand):
 
         user.set_password(new)
         user.save()
-        self.stdout.write('Successful.\n')
+        self.stdout.write('Success.\n')
