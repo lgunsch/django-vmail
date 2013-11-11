@@ -62,17 +62,17 @@ class Command(BaseCommand):
         try:
             validate_email(destination)
         except ValidationError:
-            raise CommandError('Improperly formatted email address: %s.' % (
-                destination))
+            msg = 'Improperly formatted email address: {0}.'.format(destination)
+            raise CommandError(msg)
 
         try:
             domain = Domain.objects.get(fqdn=fqdn)
         except Domain.DoesNotExist:
             if options['create_domain']:
                 domain = Domain.objects.create(fqdn=fqdn)
-                self.stdout.write('Created domain: %s.\n' % str(domain))
+                self.stdout.write('Created domain: {0}.\n'.format(str(domain)))
             else:
-                raise CommandError("Domain '%s', does not exist." % (fqdn))
+                raise CommandError("Domain '{0}', does not exist.".format(fqdn))
 
         try:
             Alias.objects.create(domain=domain, source=source,

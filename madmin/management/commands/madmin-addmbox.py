@@ -56,7 +56,7 @@ class Command(BaseCommand):
         except Domain.DoesNotExist:
             if options['create_domain']:
                 domain = Domain.objects.create(fqdn=fqdn)
-                self.stdout.write('Created domain: %s.\n' % str(domain))
+                self.stdout.write('Created domain: {0}.\n'.format(str(domain)))
             else:
                 raise CommandError('Domain does not exist.')
 
