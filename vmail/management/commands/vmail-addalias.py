@@ -9,7 +9,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-from madmin.models import Domain, Alias
+from vmail.models import Domain, Alias
 
 HELP_TEXT = """
 This will create an email aliases, forwarding address, or

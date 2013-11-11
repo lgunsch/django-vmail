@@ -1,5 +1,5 @@
 """
-madmin virtual mail administration models.
+Virtual mail administration models.
 """
 
 import base64

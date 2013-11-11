@@ -1,5 +1,5 @@
 """
-Test the madmin commands.
+Test the virtual mail management commands.
 """
 
 import sys
@@ -13,7 +13,7 @@ from ..models import MailUser, Domain, Alias
 
 
 class BaseCommandTestCase(object):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def setUp(self):
         self.syserr = sys.stderr
@@ -48,7 +48,7 @@ class BaseCommandTestCase(object):
 
 class TestChangePassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-chpasswd'
+    cmd = 'vmail-chpasswd'
     arglen = 3
 
     def _test_change_password(self, pk_):
@@ -94,7 +94,7 @@ class TestChangePassword(BaseCommandTestCase, TestCase):
 
 class TestSetPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-setpasswd'
+    cmd = 'vmail-setpasswd'
     arglen = 2
 
     def test_bad_email(self):
@@ -136,7 +136,7 @@ class TestSetPassword(BaseCommandTestCase, TestCase):
 
 class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-addmbox'
+    cmd = 'vmail-addmbox'
     arglen = 1
 
     def test_bad_email(self):
@@ -181,7 +181,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
 class TestAddAlias(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-addalias'
+    cmd = 'vmail-addalias'
     arglen = 3
 
     def test_bad_destination_email(self):

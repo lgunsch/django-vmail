@@ -1,7 +1,7 @@
 [
     {
         "pk": 1,
-        "model": "madmin.domain",
+        "model": "vmail.domain",
         "fields": {
             "fqdn": "example.org",
             "created": "2012-05-14T20:48:39.384Z"
@@ -9,7 +9,7 @@
     },
     {
         "pk": 2,
-        "model": "madmin.domain",
+        "model": "vmail.domain",
         "fields": {
             "fqdn": "example.com",
             "created": "2012-05-14T20:49:17.892Z"
@@ -17,7 +17,7 @@
     },
     {
         "pk": 1,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "john",
             "domain": 1,
@@ -28,7 +28,7 @@
     },
     {
         "pk": 2,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "john",
             "domain": 2,
@@ -39,7 +39,7 @@
     },
     {
         "pk": 3,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "robert",
             "domain": 1,
@@ -50,7 +50,7 @@
     },
     {
         "pk": 4,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "robert",
             "domain": 2,
@@ -61,7 +61,7 @@
     },
     {
         "pk": 5,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "charles",
             "domain": 1,
@@ -72,7 +72,7 @@
     },
     {
         "pk": 6,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "david",
             "domain": 2,
@@ -83,7 +83,7 @@
     },
     {
         "pk": 7,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "john.smith",
             "domain": 2,
@@ -94,7 +94,7 @@
     },
     {
         "pk": 8,
-        "model": "madmin.mailuser",
+        "model": "vmail.mailuser",
         "fields": {
             "username": "~`!#$%^&*-_+={}./?|",
             "domain": 2,
@@ -105,7 +105,7 @@
     },
     {
         "pk": 1,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "bob@example.org",
             "domain": 1,
@@ -115,7 +115,7 @@
     },
     {
         "pk": 2,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "bob@example.com",
             "domain": 2,
@@ -125,7 +125,7 @@
     },
     {
         "pk": 3,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "jonny@example.org",
             "domain": 1,
@@ -135,7 +135,7 @@
     },
     {
         "pk": 4,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "jonny@example.com",
             "domain": 2,
@@ -145,7 +145,7 @@
     },
     {
         "pk": 5,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "@example.com",
             "domain": 2,
@@ -155,7 +155,7 @@
     },
     {
         "pk": 6,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "robert@example.com",
             "domain": 2,
@@ -165,7 +165,7 @@
     },
     {
         "pk": 7,
-        "model": "madmin.alias",
+        "model": "vmail.alias",
         "fields": {
             "source": "robert@example.com",
             "domain": 2,
