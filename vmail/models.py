@@ -1,5 +1,5 @@
 """
-madmin virtual mail administration models.
+Virtual mail administration models.
 """
 
 import base64
@@ -116,7 +116,7 @@ class MailUser(models.Model):
         return user
 
     def __unicode__(self):
-        return '%s@%s' % (self.username, self.domain.fqdn)
+        return '{0}@{1}'.format(self.username, self.domain.fqdn)
 
 
 class Alias(models.Model):
@@ -155,4 +155,4 @@ class Alias(models.Model):
         super(Alias, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return '%s: %s > %s' % (self.domain.fqdn, self.source, self.destination)
+        return '{0}: {1} > {2}'.format(self.domain.fqdn, self.source, self.destination)

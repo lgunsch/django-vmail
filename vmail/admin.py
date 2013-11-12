@@ -1,5 +1,5 @@
 """
-madmin virtual mail administration interface configuration.
+Virtual mail administration interface configuration.
 """
 
 from django.contrib import admin

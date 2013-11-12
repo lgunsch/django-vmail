@@ -1,5 +1,5 @@
 """
-Test the madmin commands.
+Test the virtual mail management commands.
 """
 
 import sys
@@ -13,7 +13,7 @@ from ..models import MailUser, Domain, Alias
 
 
 class BaseCommandTestCase(object):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def setUp(self):
         self.syserr = sys.stderr
@@ -48,7 +48,7 @@ class BaseCommandTestCase(object):
 
 class TestChangePassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-chpasswd'
+    cmd = 'vmail-chpasswd'
     arglen = 3
 
     def _test_change_password(self, pk_):
@@ -94,7 +94,7 @@ class TestChangePassword(BaseCommandTestCase, TestCase):
 
 class TestSetPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-setpasswd'
+    cmd = 'vmail-setpasswd'
     arglen = 2
 
     def test_bad_email(self):
@@ -136,7 +136,7 @@ class TestSetPassword(BaseCommandTestCase, TestCase):
 
 class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-addmbox'
+    cmd = 'vmail-addmbox'
     arglen = 1
 
     def test_bad_email(self):
@@ -153,7 +153,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
     def test_create_user(self):
         domain = Domain.objects.get(pk=1)
         user = 'me'
-        call_command(self.cmd, '%s@%s' % (user, domain))
+        call_command(self.cmd, '{0}@{1}'.format(user, domain))
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
         self.assertEqual(created_user.username, user)
         self.assertEqual(created_user.domain, domain)
@@ -161,9 +161,9 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
     def test_create_user_domain_not_exists(self):
         user = 'me'
         domain = 'unknown.com'
-        self.assertSystemExit('%s@%s' % (user, domain))
+        self.assertSystemExit('{0}@{1}'.format(user, domain))
 
-        call_command(self.cmd, '%s@%s' % (user, domain), create_domain=True)
+        call_command(self.cmd, '{0}@{1}'.format(user, domain), create_domain=True)
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
         self.assertEqual(created_user.username, user)
         self.assertEqual(created_user.domain.fqdn, domain)
@@ -172,7 +172,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
         user = 'me'
         domain = 'example.com'
         password = 'my_new_password'
-        call_command(self.cmd, '%s@%s' % (user, domain), password=password)
+        call_command(self.cmd, '{0}@{1}'.format(user, domain), password=password)
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
         self.assertTrue(created_user.check_password(password))
         self.assertEqual(created_user.username, user)
@@ -181,7 +181,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
 class TestAddAlias(BaseCommandTestCase, TestCase):
 
-    cmd = 'madmin-addalias'
+    cmd = 'vmail-addalias'
     arglen = 3
 
     def test_bad_destination_email(self):
@@ -209,7 +209,7 @@ class TestAddAlias(BaseCommandTestCase, TestCase):
 
     def test_add_alias_domain_has_at_symbol(self):
         call_command(
-            self.cmd, '@%s' % (self.domain), self.source, self.destination)
+            self.cmd, '@{0}'.format(self.domain), self.source, self.destination)
         self._assert_created()
 
     def _assert_created(self):

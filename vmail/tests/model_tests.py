@@ -1,5 +1,5 @@
 """
-Test the madmin models.
+Test the virtual mail models.
 """
 
 import hashlib
@@ -15,7 +15,7 @@ from ..models import MailUser, Domain, Alias
 
 
 class DomainTest(TestCase):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def test_domain_string(self):
         domain = Domain.objects.get(pk=1)
@@ -45,7 +45,7 @@ class DomainTest(TestCase):
 
 
 class MailUserTest(TestCase):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def setUp(self):
         # use unicode string to be like django, base64 cannot handle unicode
@@ -132,7 +132,7 @@ class MailUserTest(TestCase):
 
 
 class AliasTest(TestCase):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def test_alias_string(self):
         alias = Alias.objects.get(pk=1)
@@ -170,7 +170,7 @@ class AliasTest(TestCase):
 
 
 class TransactionalAliasTest(TransactionTestCase):
-    fixtures = ['madmin_model_testdata.json']
+    fixtures = ['vmail_model_testdata.json']
 
     def _create(self, source, destination, domain):
         try:

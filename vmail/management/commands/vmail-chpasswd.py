@@ -4,7 +4,8 @@ Chpasswd command for existing mail users to change their password.
 
 from django.core.management.base import BaseCommand, CommandError
 from django.core.exceptions import ValidationError
-from madmin.models import MailUser, Domain
+
+from vmail.models import MailUser, Domain
 
 
 class Command(BaseCommand):
@@ -36,4 +37,4 @@ class Command(BaseCommand):
 
         user.set_password(new)
         user.save()
-        self.stdout.write('Successful.\n')
+        self.stdout.write('Success.\n')
