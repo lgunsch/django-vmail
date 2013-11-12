@@ -111,23 +111,23 @@ executable.
 In ``/usr/local/bin/vmail-addmbox``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/helixcloud/bin/activate
+    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
     manage.py vmail-addmbox $@
 
 In ``/usr/local/bin/vmail-addalias``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/helixcloud/bin/activate
+    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
     manage.py vmail-addalias $@
 
 In ``/usr/local/bin/vmail-chpasswd``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/helixcloud/bin/activate
+    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
     manage.py vmail-chpasswd $@
 
 In ``/usr/local/bin/vmail-setpasswd``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/helixcloud/bin/activate
+    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
     manage.py vmail-setpasswd $@

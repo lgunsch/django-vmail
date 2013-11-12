@@ -1,11 +1,12 @@
-==========================================
-django-vmail - Virtual Mail Administration
-==========================================
+============
+django-vmail
+============
+
+Virtual Mail Administration
+---------------------------
 
 Django-vmail is a  Django_ app which provides a necessary framework for a
 virtual domain email setup via Postfix_ and Dovecot_.
-
-Currently in beta, but being used actively in production.
 
 Django-vmail creates and manages virtual mail domains, mailboxes, and aliases for
 Postfix and Dovecot using an SQL database (PostgreSQL).  It allows system
