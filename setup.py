@@ -1,14 +1,10 @@
-import os
-
+from os import join, dirname
 from distutils.core import setup
 
 VERSION = '0.2.1'
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
-
-required = [
-    'Django >= 1.5.0',
-]
+README = open(join(dirname(__file__), 'README.rst')).read()
+REQUIREMENTS = open(join(dirname(__file__), 'requirements.txt')).readlines()
 
 setup(
     name='django-vmail',
@@ -27,7 +23,7 @@ setup(
         'vmail.tests',
     ],
     scripts=[],
-    install_requires=required,
+    install_requires=REQUIREMENTS,
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
