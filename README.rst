@@ -44,7 +44,7 @@ Any bugs reports, or feature requests can be added to the issue_ page at the git
    :alt: Bitdeli badge
    :target: https://bitdeli.com/free
 
-.. _docs: ./docs/configuration.rst
+.. _docs: https://github.com/lgunsch/django-vmail/blob/master/docs/configuration.rst
 .. _issue: https://github.com/lgunsch/django-vmail/issues
 .. _Workaround: https://workaround.org/ispmail
 .. _Django: https://www.djangoproject.com/
