@@ -19,11 +19,11 @@ Django-vmail was written to work with ISP virtual mail setups, similar to the
 tutorials you can find at `workaround.org`__.
 
 Why django-vmail?
------------
+-----------------
 * You can use django-admin to quickly put together a customized admin
   interface (rather then using phpMyAdmin, for example).
-* In the spirit of Django, you can quickly put together apps to utilize
-  your email database.
+* You can use this Django app to quickly put together web apps to fully
+  utilize your email database.
 
 In The Future
 -------------
