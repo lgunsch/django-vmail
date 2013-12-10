@@ -1,4 +1,4 @@
-from os import join, dirname
+from os.path import join, dirname
 from distutils.core import setup
 
 VERSION = '0.2.3'
