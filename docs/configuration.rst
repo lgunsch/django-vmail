@@ -8,15 +8,15 @@ that you have already configured Postfix.  See
 `workaround.org <https://workaround.org/ispmail>`_ for a guide on configuring
 a mail server.
 
-In version 0.2.0 of django-vmail there will be commands to help you configure the
+In version 0.3.0 of django-vmail there will be commands to help you configure the
 below SQL queries for your particular database.
 
 Note: django-vmail is configured to use the SSHA password scheme with Dovecot.
 
 Postfix
 -------
-These queries were tested on Postfix version 2.9, released with Debian Wheezy, and
-version 2.7, released with Debian Squeeze.
+These queries were tested on Postfix version 2.9 (released with Debian Wheezy), and
+version 2.7 (released with Debian Squeeze).
 
 In ``/etc/postfix/pgsql-virtual-mailbox-domains.cf``: ::
 
@@ -74,7 +74,7 @@ In ``/etc/postfix/pgsql-email2email.cf``: ::
             vmail_mailuser.active=TRUE
 
 Dovecot
----------
+-------
 Dovecot 1 and 2 have the same SQL query configuration, however, they may be
 in diffrent file locations depending on your setup.  Dovecot 2 was shipped
 with Debian Wheezy, and Dovecot 1 with Squeeze.
@@ -94,7 +94,7 @@ In ``/etc/dovecot/dovecot-sql.conf.ext`` or ``/etc/dovecot/dovecot-sql.conf``: :
              vmail_domain.active=TRUE AND \
              vmail_mailuser.active=TRUE
 
-Note: You should configure Dovecot to not user specific settings. In
+Note: You should configure Dovecot to not use user specific settings. In
 the ``userdb`` section of the Dovecot configuration.  For *example* ::
 
     userdb {
@@ -111,23 +111,23 @@ executable.
 In ``/usr/local/bin/vmail-addmbox``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
+    source /var/www/.virtualenvs/<YOUR_VIRTUALENV_DIR>/bin/activate
     manage.py vmail-addmbox $@
 
 In ``/usr/local/bin/vmail-addalias``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
+    source /var/www/.virtualenvs/<YOUR_VIRTUALENV_DIR>/bin/activate
     manage.py vmail-addalias $@
 
 In ``/usr/local/bin/vmail-chpasswd``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
+    source /var/www/.virtualenvs/<YOUR_VIRTUALENV_DIR>/bin/activate
     manage.py vmail-chpasswd $@
 
 In ``/usr/local/bin/vmail-setpasswd``: ::
 
     #!/bin/bash
-    source /var/www/.virtualenvs/<yourVirtualenvDir>/bin/activate
+    source /var/www/.virtualenvs/<YOUR_VIRTUALENV_DIR>/bin/activate
     manage.py vmail-setpasswd $@
