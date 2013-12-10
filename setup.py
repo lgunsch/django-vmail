@@ -1,7 +1,7 @@
-from os import join, dirname
+from os.path import join, dirname
 from distutils.core import setup
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 
 README = open(join(dirname(__file__), 'README.rst')).read()
 REQUIREMENTS = open(join(dirname(__file__), 'requirements.txt')).readlines()
