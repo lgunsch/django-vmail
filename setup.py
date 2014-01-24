@@ -1,10 +1,13 @@
 from os.path import join, dirname
 from distutils.core import setup
+from pip.req import parse_requirements
 
 VERSION = '0.2.3'
 
 README = open(join(dirname(__file__), 'README.rst')).read()
-REQUIREMENTS = open(join(dirname(__file__), 'requirements.txt')).readlines()
+
+REQUIREMENTS = parse_requirements(join(dirname(__file__), 'requirements.txt'))
+REQUIREMENTS = [str(ir.req) for ir in REQUIREMENTS]
 
 setup(
     name='django-vmail',
