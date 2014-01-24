@@ -1,17 +1,26 @@
+import re
+
 from os.path import join, dirname
 from distutils.core import setup
 from pip.req import parse_requirements
-
-VERSION = '0.2.3'
 
 README = open(join(dirname(__file__), 'README.rst')).read()
 
 REQUIREMENTS = parse_requirements(join(dirname(__file__), 'requirements.txt'))
 REQUIREMENTS = [str(ir.req) for ir in REQUIREMENTS]
 
+
+def get_version(package):
+    """
+    Return package version as listed in `__version__` in `init.py`.
+    """
+    init_py = open(join(package, '__init__.py')).read()
+    return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+
+
 setup(
     name='django-vmail',
-    version=VERSION,
+    version=get_version('vmail'),
     description="Virtual mail administration django app",
     author="Lewis Gunsch",
     author_email="lewis@gunsch.ca",
