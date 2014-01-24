@@ -10,10 +10,10 @@ from django.core.management.base import CommandError
 from django.test import TestCase
 
 from ..models import MailUser, Domain, Alias
+from . import recipes
 
 
 class BaseCommandTestCase(object):
-    fixtures = ['vmail_model_testdata.json']
 
     def setUp(self):
         self.syserr = sys.stderr
@@ -51,24 +51,24 @@ class TestChangePassword(BaseCommandTestCase, TestCase):
     cmd = 'vmail-chpasswd'
     arglen = 3
 
-    def _test_change_password(self, pk_):
+    def _test_change_password(self, user):
         old_pw = 'password'
         new_pw = 'new_password'
 
-        user = MailUser.objects.get(pk=pk_)
         user.set_password(old_pw)
         user.save()
         self.assertTrue(user.check_password(old_pw))
 
         call_command(self.cmd, str(user), old_pw, new_pw)
-        user = MailUser.objects.get(pk=pk_)
+        user = MailUser.objects.get(pk=user.pk)
         self.assertTrue(user.check_password(new_pw))
 
     def test_change_password(self):
         """Validate change password works as expected."""
-        self._test_change_password(1)
-        self._test_change_password(7)
-        self._test_change_password(8)
+        # Test valid usernames, and yes, the last one really is valid.
+        for username in ['john', 'john.smith', '~`!#$%^&*-_+={}./?|']:
+            user = recipes.mailuser.make(username='john')
+            self._test_change_password(user)
 
     def test_bad_old_password(self):
         user = 'john@example.org'
@@ -84,11 +84,13 @@ class TestChangePassword(BaseCommandTestCase, TestCase):
     def test_bad_domain(self):
         """Test a valid domain is required."""
         user = 'john@bad.domain.com'
-        self.assertSystemExit(user, 'old pw', 'new pw')
+        user = recipes.mailuser.make()
+        self.assertSystemExit(str(user), 'old pw', 'new pw')
 
     def test_bad_mailuser(self):
         """Test a valid user is required."""
-        user = 'bad_mailuser@example.org'
+        Domain.objects.get_or_create(fqdn='example.org')
+        user = 'bad_mailuser@example.org'  # make sure domain exists
         self.assertSystemExit(user, 'old pw', 'new pw')
 
 
@@ -114,24 +116,27 @@ class TestSetPassword(BaseCommandTestCase, TestCase):
         user = 'bad_mailuser@example.org'
         self.assertSystemExit(user, 'new pw')
 
-    def _test_change_password(self, pk_):
+    def _test_change_password(self, user):
         old_pw = 'password'
         new_pw = 'new_password'
 
-        user = MailUser.objects.get(pk=pk_)
         user.set_password(old_pw)
         user.save()
         self.assertTrue(user.check_password(old_pw))
 
         call_command(self.cmd, str(user), new_pw)
-        user = MailUser.objects.get(pk=pk_)
+        user = MailUser.objects.get(pk=user.pk)
         self.assertTrue(user.check_password(new_pw))
 
     def test_change_password(self):
         """Validate change password works as expected."""
-        self._test_change_password(1)
-        self._test_change_password(7)
-        self._test_change_password(8)
+
+        # FIXME: I am a complete duplicate
+
+        # Test valid usernames, and yes, the last one really is valid.
+        for username in ['john', 'john.smith', '~`!#$%^&*-_+={}./?|']:
+            user = recipes.mailuser.make(username='john')
+            self._test_change_password(user)
 
 
 class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
@@ -147,11 +152,11 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
         self.assertSystemExit(' a@b.c ')
 
     def test_user_already_exests(self):
-        user = MailUser.objects.get(pk=1)
+        user = recipes.mailuser.make()
         self.assertSystemExit(str(user))
 
     def test_create_user(self):
-        domain = Domain.objects.get(pk=1)
+        domain = recipes.domain.make()
         user = 'me'
         call_command(self.cmd, '{0}@{1}'.format(user, domain))
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
@@ -160,7 +165,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
     def test_create_user_domain_not_exists(self):
         user = 'me'
-        domain = 'unknown.com'
+        domain = 'unknown-unique.com'
         self.assertSystemExit('{0}@{1}'.format(user, domain))
 
         call_command(self.cmd, '{0}@{1}'.format(user, domain), create_domain=True)
@@ -170,7 +175,7 @@ class TestAddMBoxPassword(BaseCommandTestCase, TestCase):
 
     def test_create_user_with_password(self):
         user = 'me'
-        domain = 'example.com'
+        domain = str(recipes.domain.make())
         password = 'my_new_password'
         call_command(self.cmd, '{0}@{1}'.format(user, domain), password=password)
         created_user = MailUser.objects.get(username=user, domain__fqdn=str(domain))
@@ -187,24 +192,24 @@ class TestAddAlias(BaseCommandTestCase, TestCase):
     def test_bad_destination_email(self):
         """Test a proper email is required."""
         # Only destination is required to be a valid email address
-        self.assertSystemExit(str(self.domain), self.source, '')
-        self.assertSystemExit(str(self.domain), self.source, '@')
-        self.assertSystemExit(str(self.domain), self.source, 'a@b.c')
-        self.assertSystemExit(str(self.domain), self.source, ' a@b.c ')
+        self.assertSystemExit(self.domain, self.source, '')
+        self.assertSystemExit(self.domain, self.source, '@')
+        self.assertSystemExit(self.domain, self.source, 'a@b.c')
+        self.assertSystemExit(self.domain, self.source, ' a@b.c ')
 
     def setUp(self):
         super(TestAddAlias, self).setUp()
-        self.domain = Domain.objects.get(pk=1)
+        self.domain = str(recipes.domain.make())
         self.source = "alice@example.com"
         self.destination = "alice@example.org"
 
     def test_add_alias(self):
-        call_command(self.cmd, str(self.domain), self.source, self.destination)
+        call_command(self.cmd, self.domain, self.source, self.destination)
         self._assert_created()
 
     def test_add_catchall(self):
         self.source = '@example.com'
-        call_command(self.cmd, str(self.domain), self.source, self.destination)
+        call_command(self.cmd, self.domain, self.source, self.destination)
         self._assert_created()
 
     def test_add_alias_domain_has_at_symbol(self):
@@ -213,11 +218,11 @@ class TestAddAlias(BaseCommandTestCase, TestCase):
         self._assert_created()
 
     def _assert_created(self):
-        alias = Alias.objects.get(domain__fqdn=str(self.domain),
+        alias = Alias.objects.get(domain__fqdn=self.domain,
                                   source=self.source,
                                   destination=self.destination)
         self.assertTrue(alias.active)
 
     def test_aliase_exists(self):
-        call_command(self.cmd, str(self.domain), self.source, self.destination)
-        self.assertSystemExit(self.cmd, str(self.domain), self.source, self.destination)
+        call_command(self.cmd, self.domain, self.source, self.destination)
+        self.assertSystemExit(self.cmd, self.domain, self.source, self.destination)
