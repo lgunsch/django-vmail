@@ -6,9 +6,6 @@ from pip.req import parse_requirements
 
 README = open(join(dirname(__file__), 'README.rst')).read()
 
-REQUIREMENTS = parse_requirements(join(dirname(__file__), 'requirements.txt'))
-REQUIREMENTS = [str(ir.req) for ir in REQUIREMENTS]
-
 
 def get_version(package):
     """
@@ -16,6 +13,12 @@ def get_version(package):
     """
     init_py = open(join(package, '__init__.py')).read()
     return re.search("^__version__ = ['\"]([^'\"]+)['\"]", init_py, re.MULTILINE).group(1)
+
+
+def get_requirements():
+    reqs = parse_requirements(join(dirname(__file__), 'requirements.txt'))
+    requirements = [str(ir.req) for ir in reqs]
+    return requirements
 
 
 setup(
@@ -35,7 +38,7 @@ setup(
         'vmail.tests',
     ],
     scripts=[],
-    install_requires=REQUIREMENTS,
+    install_requires=get_requirements(),
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
